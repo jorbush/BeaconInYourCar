@@ -1,11 +1,18 @@
 package com.example.beaconinyourcar
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import java.io.File
+
 
 class MainActivity : AppCompatActivity() {
+    val RESP_TOMAR_FOTO = 1000
+    var mImageView = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.supportActionBar?.hide()
