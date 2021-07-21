@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical" >
+<LinearLayout
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_width="match_parent"
+    android:layout_weight="1"
+    android:orientation="vertical" >
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:text="Save place"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/btn_save"
-        android:onClick="open_save_place">
-    </Button>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_save"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="Load place"
-        android:onClick="open_load_place"/>
+        android:padding="75dp"
+        android:onClick="open_save_place"
+        android:src="@drawable/ic_location"
+        android:background="#3800B3">
+    </ImageView>
 
-</RelativeLayout>
+</LinearLayout>
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+<!-- Right side spacer -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/btn_save"
+        android:onClick="open_load_place"
+        android:padding="75dp"
+        android:src="@drawable/ic_car"
+        android:background="@color/purple_200"/>
+
+    </LinearLayout>
+
+</LinearLayout>
