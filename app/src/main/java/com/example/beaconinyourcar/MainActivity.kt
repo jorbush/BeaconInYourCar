@@ -2,9 +2,11 @@ package com.example.beaconinyourcar
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val CAMERA_PERMISSION_CODE = 1
         private const val CAMERA_REQUEST_CODE = 2
+        private const val LOCATION_PERMISSION_CODE = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,16 +36,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         var btn_save:ImageView = findViewById<ImageView>(R.id.btn_save)
         btn_save.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
-            {
-                openCamera()
-            } else {
-                ActivityCompat.requestPermissions(
-                    this, arrayOf(Manifest.permission.CAMERA),
-                    CAMERA_PERMISSION_CODE
-                )
-            }
+            takePicture()
+            //getGPSLocation()
         }
     }
 
@@ -100,5 +95,33 @@ class MainActivity : AppCompatActivity() {
     fun openCamera(){
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intent, CAMERA_REQUEST_CODE)
+    }
+    fun getGPSLocation(){
+        /*
+        var locationManagerNetwork = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val location2 = locationManagerNetwork.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+
+        if (location2 != null) {
+            val message = java.lang.String
+                .format(
+                    "Yout location : \n Longitude: %1\$s \n Latitude: %2\$s",
+                    location2.getLongitude(), location2.getLatitude()
+                )
+            Toast.makeText(applicationContext, message, Toast.LENGTH_LONG)
+                .show()
+            //use here file writer if you want to write the coordinastes in a text file
+        }*/
+    }
+    fun takePicture(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
+        {
+            openCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.CAMERA),
+                CAMERA_PERMISSION_CODE
+            )
+        }
     }
 }
