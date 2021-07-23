@@ -14,7 +14,7 @@ android:orientation="vertical" >
         android:layout_height="match_parent"
         android:id="@+id/btn_save"
         android:padding="75dp"
-        android:onClick="open_save_place"
+
         android:src="@drawable/ic_location"
         android:background="#3800B3">
     </ImageView>
