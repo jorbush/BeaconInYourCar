@@ -36,8 +36,7 @@ class MainActivity : AppCompatActivity() {
             if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
             {
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(intent, CAMERA_REQUEST_CODE)
+                openCamera()
             } else {
                 ActivityCompat.requestPermissions(
                     this, arrayOf(Manifest.permission.CAMERA),
@@ -55,10 +54,10 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_REQUEST_CODE){
             if(grantResults.isNotEmpty()&&grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(intent, CAMERA_REQUEST_CODE)
+                openCamera()
             }else{
-                Toast.makeText(this, "The aplication needs camera permission.", Toast.LENGTH_LONG)
+                Toast.makeText(this, "The aplication needs camera permission.",
+                    Toast.LENGTH_LONG)
             }
         }
     }
@@ -68,10 +67,11 @@ class MainActivity : AppCompatActivity() {
         if(resultCode == Activity.RESULT_OK){
             if(requestCode== CAMERA_REQUEST_CODE){
                 thumBnail = data!!.extras!!.get("data") as Bitmap
-                Toast.makeText(this, "The pick was saved.", Toast.LENGTH_LONG).show()
+                // TODO: Save the image in a file
                 //var imageView: ImageView ?= null
                 // imageView!!.setImageBitmap(thumBnail)
                 // saveImage(thumBnail!!)
+                Toast.makeText(this, "The picture was saved.", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -96,5 +96,9 @@ class MainActivity : AppCompatActivity() {
     fun open_load_place(view: View) {
         var intent = Intent(this, LoadPlace::class.java)
         startActivity(intent)
+    }
+    fun openCamera(){
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, CAMERA_REQUEST_CODE)
     }
 }
