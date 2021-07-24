@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         var btn_save:ImageView = findViewById<ImageView>(R.id.btn_save)
         btn_save.setOnClickListener {
             takePicture()
-            //getGPSLocation()
         }
     }
 
@@ -47,12 +46,24 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_REQUEST_CODE){
-            if(grantResults.isNotEmpty()&&grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                openCamera()
-            }else{
-                Toast.makeText(this, "The aplication needs camera permission.",
-                    Toast.LENGTH_LONG)
+        when (requestCode) {
+            CAMERA_REQUEST_CODE -> {
+                if(grantResults.isNotEmpty()&&grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    openCamera()
+                }else{
+                    Toast.makeText(this, "The aplication needs camera permission.",
+                        Toast.LENGTH_LONG)
+                }
+            }
+            LOCATION_PERMISSION_CODE -> {
+                if(grantResults.isNotEmpty()&&grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "PERMISSION ACCEPTED",
+                        Toast.LENGTH_LONG)
+                    getGPSLocation()
+                }else{
+                    Toast.makeText(this, "The aplication needs location permission.",
+                        Toast.LENGTH_LONG)
+                }
             }
         }
     }
@@ -66,7 +77,8 @@ class MainActivity : AppCompatActivity() {
                 //var imageView: ImageView ?= null
                 // imageView!!.setImageBitmap(thumBnail)
                 // saveImage(thumBnail!!)
-                Toast.makeText(this, "The picture was saved.", Toast.LENGTH_LONG).show()
+                //Toast.makeText(this, "The picture was saved.", Toast.LENGTH_LONG).show()
+                getGPSLocation()
             }
         }
     }
@@ -97,20 +109,30 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent, CAMERA_REQUEST_CODE)
     }
     fun getGPSLocation(){
-        /*
-        var locationManagerNetwork = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val location2 = locationManagerNetwork.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
+            var locationManagerNetwork = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        if (location2 != null) {
-            val message = java.lang.String
-                .format(
-                    "Yout location : \n Longitude: %1\$s \n Latitude: %2\$s",
-                    location2.getLongitude(), location2.getLatitude()
-                )
-            Toast.makeText(applicationContext, message, Toast.LENGTH_LONG)
-                .show()
-            //use here file writer if you want to write the coordinastes in a text file
-        }*/
+            val location2 = locationManagerNetwork.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+
+            if (location2 != null) {
+                val message = java.lang.String
+                    .format(
+                        "Yout location : \n Longitude: %1\$s \n Latitude: %2\$s",
+                        location2.getLongitude(), location2.getLatitude()
+                    )
+                Toast.makeText(this, message, Toast.LENGTH_LONG)
+                    .show()
+                //use here file writer if you want to write the coordinastes in a text file
+            }
+        } else {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                LOCATION_PERMISSION_CODE
+            )
+        }
+
     }
     fun takePicture(){
         if (ContextCompat.checkSelfPermission(this,
