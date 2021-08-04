@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Environment
@@ -114,17 +115,32 @@ class MainActivity : AppCompatActivity() {
         {
             var locationManagerNetwork = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-            val location2 = locationManagerNetwork.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-
+            // var location2 = locationManagerNetwork.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            if (locationManagerNetwork==null)
+                Toast.makeText(this, "locationManagerNetwork fail", Toast.LENGTH_LONG)
+                    .show()
+            val providers: List<String> =locationManagerNetwork.getProviders(true)
+            var bestLocation: Location? = null
+            for (provider in providers) {
+                val l: Location = locationManagerNetwork.getLastKnownLocation(provider) ?: continue
+                if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                    // Found best last known location: %s", l);
+                    bestLocation = l
+                }
+            }
+            var location2 = bestLocation
             if (location2 != null) {
                 val message = java.lang.String
                     .format(
-                        "Yout location : \n Longitude: %1\$s \n Latitude: %2\$s",
+                        "Your location : \n Longitude: %1\$s \n Latitude: %2\$s",
                         location2.getLongitude(), location2.getLatitude()
                     )
                 Toast.makeText(this, message, Toast.LENGTH_LONG)
                     .show()
                 //use here file writer if you want to write the coordinastes in a text file
+            }else{
+                Toast.makeText(this, "location manager fail 2", Toast.LENGTH_LONG)
+                    .show()
             }
         } else {
             ActivityCompat.requestPermissions(
